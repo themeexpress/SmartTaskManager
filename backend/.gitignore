@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pyc
+*.pyo
+
+# Environments
+env/
+venv/
+.env
+*.env
+
+# Database
+*.sqlite3
+
+# Migrations (optional, you can include or exclude)
+# migrations/
