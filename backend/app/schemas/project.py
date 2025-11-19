@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, ConfigDict, EmailStr
 
 
 class ProjectCreate(BaseModel):
@@ -11,5 +11,4 @@ class ProjectRead(BaseModel):
     name: str
     description: str | None = None
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)

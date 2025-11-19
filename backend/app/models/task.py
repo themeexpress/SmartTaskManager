@@ -1,13 +1,13 @@
 from sqlalchemy import Column, Integer, String,Date, ForeignKey, Enum
 from sqlalchemy.orm import relationship
-from backend.app.db.session import Base
+from app.db.session import Base
 import enum
 
 class TaskStatus(enum.Enum):
-    pending = "pending"
-    in_progress = "in_progress"
-    completed = "completed" 
-    cancelled = "cancelled"
+    PENDING = "pending"
+    IN_PROGRESS = "in_progress"
+    COMPLETED = "completed"
+    CANCELLED = "cancelled"
 
 
 class Task(Base):
@@ -24,6 +24,6 @@ class Task(Base):
     
     assignee_id = Column(Integer, ForeignKey("users.id"))
     project_id = Column(Integer, ForeignKey("projects.id"))
-    
+
     assignee = relationship("User")
     project = relationship("Project")

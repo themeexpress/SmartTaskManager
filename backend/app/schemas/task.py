@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from datetime import date
 from app.models.task import TaskStatus
 
@@ -23,5 +23,4 @@ class TaskRead(BaseModel):
     assignee_id: int | None = None
     project_id: int | None = None
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
