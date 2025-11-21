@@ -1,18 +1,19 @@
-from pydantic import BaseModel, ConfigDict, EmailStr
+from pydantic import BaseModel, ConfigDict
 from typing import Optional
 
-class ProjectCreate(BaseModel):
+class ProjectBase(BaseModel):
     name: str
     description: Optional[str] = None
 
-
-class ProjectRead(BaseModel):
-    id: int
-    name: str
-    description: Optional[str] = None
-
-    model_config = ConfigDict(from_attributes=True)
+class ProjectCreate(ProjectBase):
+    created_by: int  # user_id who created the project
 
 class ProjectUpdate(BaseModel):
-    name: str 
+    name: Optional[str] = None
     description: Optional[str] = None
+
+class ProjectRead(ProjectBase):
+    id: int
+    created_by: int
+
+    model_config = ConfigDict(from_attributes=True)

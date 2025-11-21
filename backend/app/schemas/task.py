@@ -1,26 +1,36 @@
 from pydantic import BaseModel, ConfigDict
 from datetime import date
-from app.models.task import TaskStatus
+from typing import Optional
+from app.models.task import TaskStatus, TaskPriority
 
-
-class TaskCreate(BaseModel):
+class TaskBase(BaseModel):
     title: str
-    description: str | None = None
-    status: TaskStatus = TaskStatus.pending
-    priority: str | None = "medium"
-    due_date: date | None = None
-    assignee_id: int | None = None
-    project_id: int | None = None
+    description: Optional[str] = None
+    status: TaskStatus = TaskStatus.todo
+    priority: TaskPriority = TaskPriority.medium
+    due_date: Optional[date] = None
+    expected_hours: Optional[float] = None
+    actual_hours: Optional[float] = None
+    parent_id: Optional[int] = None
+    assigned_to: Optional[int] = None
+    project_id: Optional[int] = None
 
+class TaskCreate(TaskBase):
+    pass
 
-class TaskRead(BaseModel):
+class TaskUpdate(BaseModel):
+    title: Optional[str] = None
+    description: Optional[str] = None
+    status: Optional[TaskStatus] = None
+    priority: Optional[TaskPriority] = None
+    due_date: Optional[date] = None
+    expected_hours: Optional[float] = None
+    actual_hours: Optional[float] = None
+    parent_id: Optional[int] = None
+    assigned_to: Optional[int] = None
+    project_id: Optional[int] = None
+
+class TaskRead(TaskBase):
     id: int
-    title: str
-    description: str | None = None
-    priority: str | None = None
-    status: TaskStatus
-    due_date: date | None = None
-    assignee_id: int | None = None
-    project_id: int | None = None
 
     model_config = ConfigDict(from_attributes=True)
