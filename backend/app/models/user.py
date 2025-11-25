@@ -18,7 +18,7 @@ class User(Base):
     email = Column(String, unique=True, nullable=False, index=True)
     password = Column(String, nullable=False)
     role = Column(Enum(UserRole), nullable=False, server_default=UserRole.user.value)
-    is_active = Column(Boolean, nullable=False, server_default="true")
+    is_active = Column(Boolean, nullable=False, default=True)
 
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     updated_at = Column(
