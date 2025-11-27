@@ -7,7 +7,7 @@ from app.schemas.user import UserCreate, UserUpdate
 from app.models.user import User
 
 
-import bcrypt as _bcrypt          # the 5.x wheel
+import bcrypt as _bcrypt
 
 def hash_password(pw: str) -> str:
     b = pw.encode('utf-8')[:72]   # always ≤ 72 bytes

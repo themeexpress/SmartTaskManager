@@ -8,7 +8,7 @@ class CRUDUser:
         return db.query(User).filter(User.id == user_id).first()
 
     def get_all(self, db: Session) -> List[User]:
-        return db.query(User).all()
+        return db.query(User).order_by(User.id.asc()).all()
 
     def create(self, db: Session, *, obj_in: UserCreate) -> User:
         db_obj = User(

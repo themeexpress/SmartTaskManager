@@ -21,7 +21,7 @@ def get_user(user_id: int, db: Session = Depends(get_db)):
 
 @router.get("/", response_model=List[UserRead])
 def get_users(db: Session = Depends(get_db)):
-    return user_service.get_users(db)
+    return user_service.get_all_users(db)
 
 @router.delete("/{user_id}")
 def delete_user(user_id: int, db: Session = Depends(get_db)):
