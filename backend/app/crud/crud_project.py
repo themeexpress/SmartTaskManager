@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
-from typing import Optional, List
 from app.models.project import Project
-from app.schemas.project import ProjectCreate, ProjectRead, ProjectUpdate
+from app.schemas.project import ProjectCreate, ProjectUpdate
+from typing import Optional, List
 
 class CRUDProject:
     def get(self, db: Session, project_id: int) -> Optional[Project]:
@@ -13,18 +13,17 @@ class CRUDProject:
     def create(self, db: Session, *, obj_in: ProjectCreate) -> Project:
         db_obj = Project(
             name=obj_in.name,
-            description=obj_in.description
+            description=obj_in.description,
+            owner_id=obj_in.owner_id
         )
         db.add(db_obj)
         db.commit()
         db.refresh(db_obj)
         return db_obj
 
-    def update(self, db: Session, *, db_obj: Project, obj_in: ProjectUpdate) -> Optional[Project]:
-        if not db_obj:
-            return None
-        db_obj.name = obj_in.name
-        db_obj.description = obj_in.description
+    def update(self, db: Session, *, db_obj: Project, obj_in: ProjectUpdate) -> Project:
+        for field, value in obj_in.model_dump(exclude_unset=True).items():
+            setattr(db_obj, field, value)
         db.commit()
         db.refresh(db_obj)
         return db_obj

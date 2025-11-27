@@ -1,12 +1,13 @@
 from pydantic import BaseModel, ConfigDict
 from typing import Optional
+from datetime import datetime
 
 class ProjectBase(BaseModel):
     name: str
     description: Optional[str] = None
 
 class ProjectCreate(ProjectBase):
-    created_by: int  # user_id who created the project
+    owner_id: int
 
 class ProjectUpdate(BaseModel):
     name: Optional[str] = None
@@ -14,6 +15,8 @@ class ProjectUpdate(BaseModel):
 
 class ProjectRead(ProjectBase):
     id: int
-    created_by: int
+    owner_id: int
+    created_at: datetime
+    updated_at: datetime
 
     model_config = ConfigDict(from_attributes=True)

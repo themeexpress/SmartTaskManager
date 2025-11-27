@@ -10,7 +10,7 @@ router = APIRouter(prefix="/projects", tags=["projects"])
 
 @router.post("/", response_model=ProjectRead)
 def create_project(project_in: ProjectCreate, db: Session = Depends(get_db)):
-    return project_service.create_project(db, project_in)
+    return project_service.create_project(db=db, project_in=project_in)
 
 @router.get("/{project_id}", response_model=ProjectRead)
 def get_project(project_id: int, db: Session = Depends(get_db)):
@@ -21,7 +21,7 @@ def get_project(project_id: int, db: Session = Depends(get_db)):
 
 @router.get("/", response_model=List[ProjectRead])
 def get_projects(db: Session = Depends(get_db)):
-    return project_service.get_projects(db)
+    return project_service.get_all_projects(db)
 
 @router.put("/{project_id}", response_model=ProjectRead)
 def update_project(project_id: int, project_in: ProjectUpdate, db: Session = Depends(get_db)):
