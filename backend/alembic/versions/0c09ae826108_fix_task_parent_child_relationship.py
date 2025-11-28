@@ -1,8 +1,8 @@
-"""initial migration
+"""fix task parent child relationship
 
-Revision ID: 036c0e90030e
-Revises: 
-Create Date: 2025-11-19 23:32:12.096221
+Revision ID: 0c09ae826108
+Revises: db4d0b295517
+Create Date: 2025-11-28 10:58:42.021991
 
 """
 from typing import Sequence, Union
@@ -12,8 +12,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '036c0e90030e'
-down_revision: Union[str, Sequence[str], None] = None
+revision: str = '0c09ae826108'
+down_revision: Union[str, Sequence[str], None] = 'db4d0b295517'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 

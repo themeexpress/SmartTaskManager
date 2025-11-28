@@ -35,15 +35,8 @@ class Task(Base):
     title = Column(String, nullable=False, index=True)
     description = Column(Text, nullable=True)
 
-    # Parent/child relationship
     parent_id = Column(Integer, ForeignKey("tasks.id"), nullable=True)
-    children = relationship(
-        "Task",
-        backref="parent",
-        cascade="all, delete-orphan",
-        single_parent=True,
-        remote_side=[id],
-    )
+    subtasks = relationship("Task", backref="parent", remote_side=[id])
 
     # Project relation
     project_id = Column(Integer, ForeignKey("projects.id"), nullable=True)
@@ -65,7 +58,7 @@ class Task(Base):
     actual_hours = Column(Float, nullable=True)
 
     # Priority & status
-    priority = Column(PgEnum(TaskPriority), nullable=False, server_default=TaskPriority.medium.value)
+    priority = Column(PgEnum(TaskPriority), nullable=False, server_default=TaskPriority.low.value)
     status = Column(PgEnum(TaskStatus), nullable=False, server_default=TaskStatus.todo.value)
 
     due_date = Column(Date, nullable=True)

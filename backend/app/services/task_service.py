@@ -28,7 +28,6 @@ class TaskService:
 
         updates = task_in.model_dump(exclude_unset=True)
         updates["updated_at"] = datetime.now(timezone.utc)
-
         return crud_task.update(db=db, db_obj=db_obj, obj_in=updates)
 
     def delete_task(self, db: Session, task_id: int) -> bool:

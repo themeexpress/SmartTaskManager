@@ -23,13 +23,8 @@ class CRUDTask:
         db.refresh(db_obj)
         return db_obj
 
-    def update(self, db: Session, *, db_obj: Task, obj_in: Union[TaskUpdate, dict]) -> Task:
-        if isinstance(obj_in, dict):
-            updates = obj_in
-        else:
-            updates = obj_in.model_dump(exclude_unset=True)
-        
-        for field, value in updates.items():
+    def update(self, db: Session, *, db_obj: Task, obj_in: dict) -> Task:
+        for field, value in obj_in.items():
             setattr(db_obj, field, value)
         db.commit()
         db.refresh(db_obj)

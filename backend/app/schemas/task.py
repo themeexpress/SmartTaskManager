@@ -12,7 +12,7 @@ class TaskBase(BaseModel):
     expected_hours: Optional[float] = None
     actual_hours: Optional[float] = None
     parent_id: Optional[int] = None
-    assigned_to: Optional[int] = None
+    assignee_id: Optional[int] = None
     project_id: Optional[int] = None
 
 class TaskCreate(TaskBase):
@@ -27,7 +27,7 @@ class TaskUpdate(BaseModel):
     expected_hours: Optional[float] = None
     actual_hours: Optional[float] = None
     parent_id: Optional[int] = None
-    assigned_to: Optional[int] = None
+    assignee_id: Optional[int] = None
     project_id: Optional[int] = None
 
 class TaskRead(TaskBase):
