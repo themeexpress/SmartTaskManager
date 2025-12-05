@@ -48,10 +48,8 @@ class Task(Base):
         "User", back_populates="tasks_assigned", foreign_keys=[assignee_id]
     )
 
-    created_by = Column(Integer, ForeignKey("users.id"), nullable=True)
-    creator = relationship(
-        "User", back_populates="tasks_created", foreign_keys=[created_by]
-    )
+    created_by = Column(Integer, ForeignKey("users.id"), nullable=False)
+    creator = relationship("User", back_populates="tasks_created", foreign_keys=[created_by])
 
     # Time and estimate
     expected_hours = Column(Float, nullable=True)

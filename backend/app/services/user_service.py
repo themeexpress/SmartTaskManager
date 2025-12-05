@@ -9,6 +9,8 @@ from app.models.user import User
 
 import bcrypt as _bcrypt
 
+from app.core.exceptions import NotFoundException
+
 def hash_password(pw: str) -> str:
     b = pw.encode('utf-8')[:72]   # always ≤ 72 bytes
     return _bcrypt.hashpw(b, _bcrypt.gensalt()).decode()
@@ -38,7 +40,7 @@ class UserService:
     def update_user(self, db: Session, user_id: int, user_in: UserUpdate) -> Optional[User]:
         db_obj = crud_user.get(db, user_id)
         if not db_obj:
-            return None
+            raise NotFoundException("Task not found")
         updates = user_in.model_dump(exclude_unset=True)
         # Hash password if it is being updated
         if "password" in updates:

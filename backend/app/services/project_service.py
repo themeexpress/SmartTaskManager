@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from app.crud.crud_project import crud_project
 from app.schemas.project import ProjectCreate, ProjectUpdate
 from app.models.project import Project
+from app.core.exceptions import NotFoundException
 
 class ProjectService:
     def get_project(self, db: Session, project_id: int) -> Optional[Project]:
@@ -22,7 +23,7 @@ class ProjectService:
     def update_project(self, db: Session, project_id: int, project_in: ProjectUpdate) -> Optional[Project]:
         db_obj = crud_project.get(db, project_id)
         if not db_obj:
-            return None
+            raise NotFoundException("Task not found")
         updates = project_in.model_dump(exclude_unset=True)
         updates["updated_at"] = datetime.now(timezone.utc)
         return crud_project.update(db=db, db_obj=db_obj, obj_in=ProjectUpdate(**updates))

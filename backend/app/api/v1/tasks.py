@@ -3,8 +3,11 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from app.db.session import get_db
+from app.models.user import User
+from app.core.dev_auth import get_current_user_stub as get_current_user
 from app.schemas.task import TaskCreate, TaskUpdate, TaskRead
 from app.services.task_service import task_service
+from app.core.exceptions import NotFoundException
 
 router = APIRouter(prefix="/tasks", tags=["tasks"])
 
@@ -13,7 +16,7 @@ router = APIRouter(prefix="/tasks", tags=["tasks"])
 def get_task(task_id: int, db: Session = Depends(get_db)):
     task = task_service.get_task(db, task_id)
     if not task:
-        raise HTTPException(status_code=404, detail="Task not found")
+        raise NotFoundException("Task not found")
     return task
 
 
@@ -23,15 +26,19 @@ def get_all_tasks(db: Session = Depends(get_db)):
 
 
 @router.post("/", response_model=TaskRead, status_code=status.HTTP_201_CREATED)
-def create_task(task_in: TaskCreate, db: Session = Depends(get_db)):
-    return task_service.create_task(db, task_in)
+def create_task(
+    task_in: TaskCreate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    return task_service.create_task(db=db, task_in=task_in, created_by=current_user.id)
 
 
 @router.put("/{task_id}", response_model=TaskRead)
 def update_task(task_id: int, task_in: TaskUpdate, db: Session = Depends(get_db)):
     updated = task_service.update_task(db, task_id, task_in)
     if not updated:
-        raise HTTPException(status_code=404, detail="Task not found")
+        raise NotFoundException("Task not found")
     return updated
 
 
@@ -39,5 +46,5 @@ def update_task(task_id: int, task_in: TaskUpdate, db: Session = Depends(get_db)
 def delete_task(task_id: int, db: Session = Depends(get_db)):
     success = task_service.delete_task(db, task_id)
     if not success:
-        raise HTTPException(status_code=404, detail="Task not found")
-    return None
+        raise NotFoundException("Task not found")
+    return {"message": "Task deleted successfully"}

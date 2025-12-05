@@ -5,6 +5,8 @@ from app.schemas.task import TaskCreate, TaskUpdate
 from app.models.task import Task
 from typing import Optional, List
 
+from app.core.exceptions import NotFoundException
+
 
 class TaskService:
     def get_task(self, db: Session, task_id: int) -> Optional[Task]:
@@ -13,9 +15,9 @@ class TaskService:
     def get_all_tasks(self, db: Session) -> List[Task]:
         return crud_task.get_all(db)
 
-    def create_task(self, db: Session, task_in: TaskCreate) -> Task:
-        # Add timestamps
+    def create_task(self, db: Session, task_in: TaskCreate, created_by: int) -> Task:
         data = task_in.model_dump()
+        data["created_by"] = created_by
         data["created_at"] = datetime.now(timezone.utc)
         data["updated_at"] = datetime.now(timezone.utc)
 
@@ -23,8 +25,9 @@ class TaskService:
 
     def update_task(self, db: Session, task_id: int, task_in: TaskUpdate) -> Optional[Task]:
         db_obj = crud_task.get(db, task_id)
+
         if not db_obj:
-            return None
+            raise NotFoundException("Task not found")
 
         updates = task_in.model_dump(exclude_unset=True)
         updates["updated_at"] = datetime.now(timezone.utc)
